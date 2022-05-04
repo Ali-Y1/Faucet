@@ -9,7 +9,7 @@ contract Faucet {
     mapping(address => uint256) public addressToAmountFunded;
     address[] public funders;
 
-    mapping(address => uint256) public addressToAmountWithDrawn;
+    mapping(address => uint256) public addressToTimetWithDrawn;
 
     address public owner;
     AggregatorV3Interface public priceFeed;
@@ -79,8 +79,8 @@ contract Faucet {
         uint256 minimumUSD = 2500 * 10**18;
         uint256 minAmount = 100000000000000000;
         require(getConversionRate(address(this).balance) > minimumUSD,"Account balance is low");
-        require(now >= (addressToAmountWithDrawn[msg.sender] + 24 hours), "you can't withdraw 2 times in 24 hours");
-        addressToAmountWithDrawn[msg.sender] = now;
+        require(now >= (addressToTimeWithDrawn[msg.sender] + 24 hours), "you can't withdraw 2 times in 24 hours");
+        addressToTimeWithDrawn[msg.sender] = now;
         msg.sender.transfer(minAmount);
     }
 }
